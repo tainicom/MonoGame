@@ -156,10 +156,17 @@ namespace Microsoft.Xna.Framework.Graphics
         private void UpdateDevice(Device device, DeviceContext context)
         {
             // TODO: Lost device logic!
-            SharpDX.Utilities.Dispose(ref _d3dDevice);
-            _d3dDevice = device;
+            if (WindowsPhoneGameWindow.IsUsingDrawingSurfaceBackgroundGrid)
+            {
+			    context.ClearState();
+            }
+            else
+            {
+                SharpDX.Utilities.Dispose(ref _d3dDevice);
+                SharpDX.Utilities.Dispose(ref _d3dContext);
+            }
 
-            SharpDX.Utilities.Dispose(ref _d3dContext);
+            _d3dDevice = device;
             _d3dContext = context;
 
             SharpDX.Utilities.Dispose(ref _depthStencilView);
@@ -1374,7 +1381,7 @@ namespace Microsoft.Xna.Framework.Graphics
             FeatureLevel featureLevel;
 			try
             {
-				if (graphicsDevice == null || graphicsDevice._d3dDevice == null || graphicsDevice._d3dDevice.NativePointer == null) 
+				if (graphicsDevice == null || graphicsDevice._d3dDevice == null || graphicsDevice._d3dDevice.NativePointer == null || graphicsDevice._d3dDevice.NativePointer == IntPtr.Zero) 
 					featureLevel = SharpDX.Direct3D11.Device.GetSupportedFeatureLevel();
                	else
                 	featureLevel = graphicsDevice._d3dDevice.FeatureLevel;
