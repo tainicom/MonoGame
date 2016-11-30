@@ -186,18 +186,16 @@ namespace Microsoft.Xna.Framework.Graphics
             _currentRenderTargets[0] = _renderTargetView;
             _currentDepthStencilView = _depthStencilView;
 			
-            var resource = _renderTargetView.Resource;
-            using (var texture2D = new SharpDX.Direct3D11.Texture2D(resource.NativePointer))
             {
                 var currentWidth = PresentationParameters.BackBufferWidth;
                 var currentHeight = PresentationParameters.BackBufferHeight;
 
                 if (_depthStencilView == null || 
-                    currentWidth  != texture2D.Description.Width ||
-                    currentHeight != texture2D.Description.Height)
+                    currentWidth  != (int)WindowsPhoneGameWindow.Width ||
+                    currentHeight != (int)WindowsPhoneGameWindow.Height)
                 {
-                    PresentationParameters.BackBufferWidth = texture2D.Description.Width;
-                    PresentationParameters.BackBufferHeight = texture2D.Description.Height;
+                    PresentationParameters.BackBufferWidth = (int)WindowsPhoneGameWindow.Width;
+                    PresentationParameters.BackBufferHeight = (int)WindowsPhoneGameWindow.Height;
 
 					SharpDX.Utilities.Dispose(ref _depthStencilView);
                     using (var depthTexture = new SharpDX.Direct3D11.Texture2D(
