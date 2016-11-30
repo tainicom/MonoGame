@@ -135,6 +135,12 @@ namespace MonoGame.Framework.WindowsPhone
                     _drawingSurfaceUpdateHandler.CreateWindowSizeDependentResources(surfaceSize);
                     _synchronizedTexture = _host.CreateSynchronizedTexture(_drawingSurfaceUpdateHandler._renderTarget);
                 }
+                else if (surfaceSize.Width != _drawingSurfaceUpdateHandler._renderTarget.Description.Width ||
+                         surfaceSize.Height != _drawingSurfaceUpdateHandler._renderTarget.Description.Height)
+                {                    
+                    _drawingSurfaceUpdateHandler.CreateWindowSizeDependentResources(surfaceSize);
+                    _synchronizedTexture = _host.CreateSynchronizedTexture(_drawingSurfaceUpdateHandler._renderTarget);
+                }
 
                 synchronizedTexture = _synchronizedTexture;
                 textureSubRectangle = new RectangleF

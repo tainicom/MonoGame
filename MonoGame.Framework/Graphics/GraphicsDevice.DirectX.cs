@@ -208,7 +208,8 @@ namespace Microsoft.Xna.Framework.Graphics
                             SampleDescription = new SharpDX.DXGI.SampleDescription(1, 0),
                             Usage = ResourceUsage.Default
                         }))
-                        _depthStencilView = new DepthStencilView(_d3dDevice, depthTexture);
+                    _depthStencilView = new DepthStencilView(_d3dDevice, depthTexture);
+                    _currentDepthStencilView = _depthStencilView;
 
                     Viewport = new Viewport(0, 0, PresentationParameters.BackBufferWidth, PresentationParameters.BackBufferHeight);
                 }
