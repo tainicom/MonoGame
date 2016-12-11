@@ -26,8 +26,8 @@ using System.Resources;
 [assembly: AssemblyDescription("MonoGame for Windows Phone 8")]
 #endif
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("MonoGame.Framework")]
+[assembly: AssemblyCompany("tainicom LTD")]
+[assembly: AssemblyProduct("MonoGame.9000")]
 [assembly: AssemblyCopyright("Copyright © 2011-2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -57,5 +57,5 @@ using System.Resources;
 
 // Version information for the assembly which is automatically 
 // set by our automated build process.
-[assembly: AssemblyVersion("0.0.0.0")]
-[assembly: AssemblyFileVersion("0.0.0.0")]
+[assembly: AssemblyVersion("3.5.1.9001")]
+[assembly: AssemblyFileVersion("3.5.1.9001")]
