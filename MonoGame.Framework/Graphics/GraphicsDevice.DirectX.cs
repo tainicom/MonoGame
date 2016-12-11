@@ -156,10 +156,17 @@ namespace Microsoft.Xna.Framework.Graphics
         private void UpdateDevice(Device device, DeviceContext context)
         {
             // TODO: Lost device logic!
-            SharpDX.Utilities.Dispose(ref _d3dDevice);
-            _d3dDevice = device;
+            if (WindowsPhoneGameWindow.IsUsingDrawingSurfaceBackgroundGrid)
+            {
+			    context.ClearState();
+            }
+            else
+            {
+                SharpDX.Utilities.Dispose(ref _d3dDevice);
+                SharpDX.Utilities.Dispose(ref _d3dContext);
+            }
 
-            SharpDX.Utilities.Dispose(ref _d3dContext);
+            _d3dDevice = device;
             _d3dContext = context;
 
             SharpDX.Utilities.Dispose(ref _depthStencilView);
@@ -179,18 +186,16 @@ namespace Microsoft.Xna.Framework.Graphics
             _currentRenderTargets[0] = _renderTargetView;
             _currentDepthStencilView = _depthStencilView;
 			
-            var resource = _renderTargetView.Resource;
-            using (var texture2D = new SharpDX.Direct3D11.Texture2D(resource.NativePointer))
             {
                 var currentWidth = PresentationParameters.BackBufferWidth;
                 var currentHeight = PresentationParameters.BackBufferHeight;
 
                 if (_depthStencilView == null || 
-                    currentWidth  != texture2D.Description.Width ||
-                    currentHeight != texture2D.Description.Height)
+                    currentWidth  != (int)WindowsPhoneGameWindow.Width ||
+                    currentHeight != (int)WindowsPhoneGameWindow.Height)
                 {
-                    PresentationParameters.BackBufferWidth = texture2D.Description.Width;
-                    PresentationParameters.BackBufferHeight = texture2D.Description.Height;
+                    PresentationParameters.BackBufferWidth = (int)WindowsPhoneGameWindow.Width;
+                    PresentationParameters.BackBufferHeight = (int)WindowsPhoneGameWindow.Height;
 
 					SharpDX.Utilities.Dispose(ref _depthStencilView);
                     using (var depthTexture = new SharpDX.Direct3D11.Texture2D(
@@ -208,7 +213,8 @@ namespace Microsoft.Xna.Framework.Graphics
                             SampleDescription = new SharpDX.DXGI.SampleDescription(1, 0),
                             Usage = ResourceUsage.Default
                         }))
-                        _depthStencilView = new DepthStencilView(_d3dDevice, depthTexture);
+                    _depthStencilView = new DepthStencilView(_d3dDevice, depthTexture);
+                    _currentDepthStencilView = _depthStencilView;
 
                     Viewport = new Viewport(0, 0, PresentationParameters.BackBufferWidth, PresentationParameters.BackBufferHeight);
                 }
@@ -1373,7 +1379,7 @@ namespace Microsoft.Xna.Framework.Graphics
             FeatureLevel featureLevel;
 			try
             {
-				if (graphicsDevice == null || graphicsDevice._d3dDevice == null || graphicsDevice._d3dDevice.NativePointer == null) 
+				if (graphicsDevice == null || graphicsDevice._d3dDevice == null || graphicsDevice._d3dDevice.NativePointer == null || graphicsDevice._d3dDevice.NativePointer == IntPtr.Zero) 
 					featureLevel = SharpDX.Direct3D11.Device.GetSupportedFeatureLevel();
                	else
                 	featureLevel = graphicsDevice._d3dDevice.FeatureLevel;
